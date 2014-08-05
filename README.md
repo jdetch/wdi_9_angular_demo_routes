@@ -1,11 +1,15 @@
 ## Angular Routes.
 
-We are going to dive into Angular Routes.
+We are going to dive into Angular Routes. Routes are used to "dispatch" a HTTP Request to a URL to some code that will be executed.
+
+Angular will define a set of routes that will map URL, or paths, to a Controller and View.
 
 ## Objectives
 
-* Use a Route to associate a Path with a Controller and View.
-* Use dependency injection to inject the routing module, ngRoute.
+* Define a Route inside the Configuration for a specific application module.
+* Use dependency injection to inject the routing module, ngRoute, into the application module.
+* Use a Route to associate a URL, or path, with a Controller and View.
+* Dispatch a request for a URL to a Controller. And associate a View that this Controller will use to generate HTML.
 
 
 ## Demo
@@ -14,7 +18,7 @@ We are going to dive into Angular Routes.
 
 Angular routing works _somewhat_ like Rails routes. But, there are some very crucial differences. 
 
-We will need to add another Angular module, ngRoute, that will be used to create routes. Below we'll see how this module is kept in it's own javascript file and how it's used.
+First, we will need to add another Angular module, ngRoute, that will be used to create routes. The angular.js file does not have the code needed for routing. The code for this Routing module is kept in it's own javascript file.
 
 As we'll see, Angular routing explicitly connects URL/Paths to specific Angular Controllers and Views.
 	
@@ -22,6 +26,8 @@ We are going to associate the path ``/`` with the Controller, ``app/controlllers
 
 	
 #### Create the shell page, index.html.
+
+_The shell page is somewhat like a layout in Rails_
 
 ```
 <!document html>
@@ -48,8 +54,14 @@ We are going to associate the path ``/`` with the Controller, ``app/controlllers
 
 * We have used the ng-view directive to define where the view for a route will be shown within the page.
 	* The index.html, shell page, is like a rails layout. And a ng-view directive is somewhat like a yield statement in a rails layout.
+	* The div with the ng-view directive will be replaced by the contents, HTML, generated from the View.
 
 #### Create a app/app.js file
+
+
+_Notice the use of a Immediately Invoked Function Expression (IIFE). This is a very common pattern used to create an isolated scope and prevent Global namespace pollution._  
+
+_In this case we have named the IIFE to 'customersAppIIFE'. The name is only useful when debugging and viewing the call stack_
 
 ```
 (function customersAppIIFE(){
@@ -70,10 +82,10 @@ We are going to associate the path ``/`` with the Controller, ``app/controlllers
 
 ```
 
-* This app will need the ngRoute module. So we define the app's dependency
+* This app will _depend on_ the ngRoute module. So we define the app's dependencies in the Array that is the second argument.  
 	``var app = angular.module('customersApp', ['ngRoute']);``  
 
-* The $routeProvider module is injected into the config. _(dependency injection)_  
+* The $routeProvider module is injected into the app's config. _(dependency injection)_  
 	`` app.config(function($routeProvider){ ``
 
 * Inside the config function we define two routes.
@@ -118,6 +130,8 @@ Nothing new here.
 
 ##### Start up a HTTP Server for this app.
 
+Yep, we've got to serve this thru a HTTP server.
+
 ```
  ruby -run -e httpd . -p5000
 ```
@@ -128,7 +142,7 @@ http://localhost:5000
 
 #### Inspect with Chrome
 
-The page to see how the div with ng-view is replaced by the view defined in app/views/customers.html
+Inspect the page to see how the div with ng-view is replaced by the view defined in app/views/customers.html
 
 ## Lab
 
@@ -164,8 +178,8 @@ We will add a route, view and controller for orders.
 
 ```
 
-* Notice we added a route, '/orders/:customerId', that takes a parameter.
-* This route will associaten the ordersController with the orders_done View.
+* Added a route, '/orders/:customerId', that takes a parameter.
+* This route will associate the ordersController with the orders_done View.
 
 #### Add a ordersController in app/controllers.
 
@@ -202,7 +216,7 @@ We will add a route, view and controller for orders.
 
 ```
 
-* This controller will have two modules injected into it.
+* This controller will have two services injected into it.
 	* $scope (ViewModel)
 	* $routeParams - This will allow access to HTTP paramenters.
 * We will get the customer ID from the $routeParams.
@@ -229,9 +243,21 @@ We will add a route, view and controller for orders.
 ```
 
 
+
+
 #### Finally don't forget about the customerData
 
 This is just hard coded data that lives in the global scope for now. It will be replaced by the data coming from the back end. 
+
+It's a hard coded file, app/customerData.js that should be referenced from the index.html, shell file.
+
+
+```
+...
+    <script type='text/javascript' src='js/angular-route.js'></script>
+    <script type='text/javascript' src='app/customerData.js'></script>
+...
+```
 
 
 ## Documentation
