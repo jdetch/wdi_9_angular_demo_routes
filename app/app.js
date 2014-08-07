@@ -13,8 +13,11 @@
         {
           controller: 'customersController',
           templateUrl: 'app/views/customers.html'
-        }
-      )
+        })
+      .when('/songs',{
+        controller: 'songsController',
+        templateUrl: 'app/views/songs.html'
+      })
       .otherwise({redirectTo: '/'});
   });
 })();
