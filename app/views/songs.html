@@ -1,0 +1,27 @@
+<!doctype html>
+<html ng-app>
+  <head>
+    <script type="text/javascript" src='js/angular.js'></script>
+    <script src='app/controllers/songsController.js'></script>
+  </head>
+  <body ng-controller="songsController">
+    <div>
+      <h3>Song List</h3>
+        Filter: <input type="text" ng-model="songFilter.title"/>
+            <table>
+              <tr>
+                <th ng-click="doSort('title')">Title:</th>
+                <th ng-click="doSort('artist')">Artist:</th>
+                <th ng-click="doSort('duration')">Duration:</th>
+                <th ng-click="doSort('price')">Price:</th>
+              </tr>
+              <tr ng-repeat="song in songs | filter:songFilter | orderBy:sortBy:reverse">
+                <td> {{ song.title }} </td>
+                <td> {{ song.artist }} </td>
+                <td> {{ song.duration }} </td>
+                <td> {{ song.price }} </td>
+              </tr>
+            </table>
+
+</body>
+</html>
